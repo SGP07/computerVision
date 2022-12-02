@@ -1,0 +1,4 @@
+#ignore the venv
+computer_vision/
+
+__pycache__/
