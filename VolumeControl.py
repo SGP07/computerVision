@@ -39,6 +39,8 @@ while True:
         volume = int(np.interp(length, [35, 250],[0,100]))
         print(volume)
         call(["amixer", "-D", "pulse", "sset", "Master", f"{volume}%"])
+        cv2.putText(img, f"Volume {volume}%", (83, 400), 1, cv2.FONT_HERSHEY_COMPLEX, (255, 255, 0), 3)
+
 
 
 
