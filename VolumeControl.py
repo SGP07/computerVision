@@ -2,6 +2,7 @@ import cv2, time
 import HandTracking as ht
 import numpy as np
 import math
+from subprocess import call
 
 #set up
 wCam, hCam = 640, 480
@@ -12,7 +13,7 @@ cap.set(3, wCam)
 cap.set(4, hCam)
 
 pTime = 0 #previous time
-detector = ht.handDetector()
+detector = ht.handDetector(detectConf=0.65, trackConf=0.65)
 
 
 while True:
@@ -30,9 +31,15 @@ while True:
         cv2.circle(img, center, 8, (255, 0, 255), cv2.FILLED)
 
         length = math.hypot(thumb[0]-index[0], thumb[1]-index[1])
-        print(length)
-        if length < 35: cv2.circle(img, center, 8, (255, 0, 0), cv2.FILLED)
-        if length > 250: cv2.circle(img, center, 8, (255, 255, 0), cv2.FILLED)
+        # print(length)
+        
+        if length < 35: cv2.circle(img, center, 8, (255, 255, 255), cv2.FILLED)
+        if length > 250: cv2.circle(img, center, 8, (255, 0, 0), cv2.FILLED)
+
+        volume = int(np.interp(length, [35, 250],[0,100]))
+        print(volume)
+        call(["amixer", "-D", "pulse", "sset", "Master", f"{volume}%"])
+
 
 
     cTime = time.time()
