@@ -27,18 +27,33 @@ class handDetector:
 
     def findPosition(self, img, handNum=0, draw=True):
 
-        lmList = []
+        self.lmList = []
 
         if self.results.multi_hand_landmarks:
             hand1 = self.results.multi_hand_landmarks[handNum]
             for id, lm in enumerate(hand1.landmark):
                 h, w, c = img.shape
                 cx, cy = int(lm.x*w), int(lm.y*h)
-                lmList.append([id, cx, cy])
+                self.lmList.append([id, cx, cy])
                 if draw:
                     cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
         
-            return lmList
+            return self.lmList
+
+    def fingersUp(self):
+        #check if thumb is up, if point 4 is on the side (comparing X axis of 4 with 3)
+        fingers, tipIds = [], [8, 12, 16, 20]
+        if self.lmList[4][1] > self.lmList[3][1]:
+            fingers.append(1)
+        else :
+            fingers.append(0)
+
+        for id in tipIds:
+            if self.lmList[id][2] < self.lmList[id-2][2]:
+                fingers.append(1)
+            else:
+                fingers.append(0)
+        return fingers
 
 # cap = cv2.VideoCapture(0)
 # pTime, cTime = 0, 0
@@ -48,14 +63,16 @@ class handDetector:
 #     success, img = cap.read()
 #     img = detector.findHands(img) 
 #     lmList = detector.findPosition(img, 0, False)
+    
 #     if lmList != None:
-#         print(lmList[4])
+#         fingers = detector.fingersUp()
+#         print(fingers)
     
 #     cTime = time.time()
 #     fps = 1/(cTime-pTime)
 #     pTime = cTime
 
-#     cv2.putText(img, str(int(fps)), (10,70), cv2.FONT_HERSHEY_COMPLEX, 3, (255,0,255), 3)
-
+#     cv2.putText(img, f"{int(fps)} fps", (10, 70), 1, cv2.FONT_HERSHEY_COMPLEX, (255, 0, 0), 3)
+    
 #     cv2.imshow("Image", img)
 #     cv2.waitKey(1)
