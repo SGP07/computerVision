@@ -2,12 +2,12 @@ import cv2, time
 import HandTracking as ht
 import numpy as np
 import math
-from subprocess import call
+import pyautogui as pg
 
 #set up
 wCam, hCam = 640, 480
 
-wScreen, hScreen = 1920, 1080
+wScreen, hScreen = pg.size()
 
 cap = cv2.VideoCapture(0)
 cap.set(3, wCam)
@@ -24,23 +24,26 @@ while True:
     lmList = detector.findPosition(img, 0, False)
 
     if lmList != None:        
-        index = lmList[8][1:]
         thumb = lmList[4][1:]
+        index = lmList[8][1:]
         pinky = lmList[20][1:]
     
-        cv2.circle(img, index, 10, (255, 0, 255), cv2.FILLED)
 
         fingers = detector.fingersUp()
-        length = math.hypot(thumb[0]-pinky[0], thumb[1]-pinky[1])
+        length = math.hypot(thumb[0]-lmList[5][1], thumb[1]-lmList[5][2])
 
         cursor = np.interp(index[0], (0, wCam), (0, wScreen)), np.interp(index[1], (0, wCam), (0, wScreen))    
-    
-        if fingers[1] == 1:
-            print('Aiming', cursor)
         
-        if length < 40:
-            print('SHOOT pew pew')
-       
+        if fingers[1] == 1: #if index is up
+            pg.moveTo(cursor)
+            cv2.circle(img, index, 10, (255, 0, 255), cv2.FILLED)
+
+        if fingers[0] == 0: #click if thumb is on the side
+            pg.click(cursor)
+            
+        if fingers[4] == 1: #right click if pinky is up
+            pg.click(button='right')
+            cv2.circle(img, pinky, 8, (255, 0, 255), cv2.FILLED)    
     
 
     cTime = time.time()
