@@ -4,6 +4,8 @@ import numpy as np
 import math
 import pyautogui as pg
 
+pg.FAILSAFE=False
+
 #set up
 wCam, hCam = 640, 480
 
