@@ -11,6 +11,7 @@ wCam, hCam = 640, 480
 
 wScreen, hScreen = pg.size()
 
+cv2.setUseOptimized(True)
 cap = cv2.VideoCapture(0)
 cap.set(3, wCam)
 cap.set(4, hCam)
