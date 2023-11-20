@@ -26,7 +26,8 @@ This project utilizes computer vision to interpret hand gestures and perform act
 ### Installation
 1. Install the required packages:
    ```bash
-   pip install opencv-python numpy pyautogui```
+   pip install opencv-python numpy pyautogui
+   ```
 
   ## Usage
 
