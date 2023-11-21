@@ -19,6 +19,7 @@ This project utilizes computer vision to interpret hand gestures and perform act
 
 ### Requirements
 - Python 3.x
+- Mediapipe
 - OpenCV
 - NumPy
 - PyAutoGUI
@@ -26,7 +27,7 @@ This project utilizes computer vision to interpret hand gestures and perform act
 ### Installation
 1. Install the required packages:
    ```bash
-   pip install opencv-python numpy pyautogui
+   pip install mediapipe opencv-python numpy pyautogui
    ```
 
   ## Usage
